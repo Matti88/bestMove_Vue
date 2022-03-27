@@ -1,6 +1,5 @@
 <template>
     <div class="card p-fluid">
-
       <h4>Houses within Areas </h4>
       <Button label="Primary" class="mr-1 mb-2" @click="searchOptimal">Within Area</button>
       <Button  label="Secondary" class="mr-1 mb-2 p-button-secondary" @click="printSearch">All</button>

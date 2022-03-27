@@ -14,23 +14,15 @@
 </template>
 
 
-
 <script >
 import EventBus from "@/AppEventBus";
 import ProductService from "../service/ProductService";
-
-//Imports of all my custom components
 import SearchThingy from "./SearchThingy.vue";
-// import ApiKeyInsert from "./ApiKeyInsert.vue"
-//import UploadExcelFile from "./UploadExcelFile.vue"
 import RoutesAreasOps from "./RoutesAreasOps.vue";
 import PoiSummary from "./PoiSummary.vue";
-// import TableHouses from "./TableHouses.vue";
 import LeafletMap from "./LeafletMap.vue";
-
 import CountryService from "../service/CountryService";
 import NodeService from "../service/NodeService";
-
 
 export default {
   components: {

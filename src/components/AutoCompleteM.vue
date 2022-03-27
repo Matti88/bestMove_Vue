@@ -1,8 +1,5 @@
-
-
 <template>
   <div >
-    <!-- <label>Select Address:</label> -->
     <span class="p-input-icon-left">
       <i class="pi pi-search" />
       <InputText type="text" v-model="searchString"  />
@@ -21,7 +18,6 @@
 </template>
 
 
-
 <script>
 import { storeToRefs } from "pinia";
 import { useSearchItems } from "@/stores/searchItem";
@@ -31,11 +27,17 @@ import { watch } from "vue";
 
 export default defineComponent({
   setup() {
-    const locations = useSearchItems();
-    const { searchString, results, isOpen, mode, range } =
-      storeToRefs(locations);
-    const { queryResults, setSingleResults, reset, setMode, commitPOIresult } =
-      locations;
+    const searchStore = useSearchItems();
+    const { searchString, 
+            results, 
+            isOpen, 
+            mode, 
+            range } = storeToRefs(searchStore);
+    const { queryResults, 
+            setSingleResults, 
+            reset, 
+            setMode, 
+            commitPOIresult } = searchStore;
 
     watch(() => searchString.value, debounce(queryResults, 2000));
 

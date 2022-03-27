@@ -1,6 +1,3 @@
-/* seeking for help
- https://www.digitalocean.com/community/tutorials/vuejs-vue-autocomplete-component
-*/
 <template>
   <div class="card p-fluid">
     <h5>Point Of Interest</h5>
@@ -58,7 +55,7 @@ import { useSearchItems } from "@/stores/searchItem";
 import { defineComponent } from "@vue/runtime-core";
 import { debounce } from "lodash";
 import { watch } from "vue";
-// import AutoCompleteM from "./AutoCompleteM.vue";
+
 
 export default defineComponent({
   name: "SearchThinghy",
