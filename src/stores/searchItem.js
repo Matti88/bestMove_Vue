@@ -1,8 +1,5 @@
 
 //store for POI component management
-
-
-//API_KEY=6ff1e1cca8fa4e248e37d74ae59144af
 import { defineStore } from 'pinia'
 import { useKeyApi } from './keyApi'
 import { usePoiApi } from './poi'
@@ -14,11 +11,9 @@ class stackObject {
       this.counter = 0;
       this.max = this.list.length;
     }
-  
     addtoStack(itemToStack) {
       this.list.append(itemToStack);
     }
-  
     getNewColor() {
       var return_item;
   
@@ -72,7 +67,6 @@ export const useSearchItems = defineStore({
         },
 
         setSingleResults(result) {
-
             //setting up for one of the results of the suggested locations
 
             /* Resetting for refreshed parts */

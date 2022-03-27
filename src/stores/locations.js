@@ -14,11 +14,8 @@ function arrayEquals(a, b) {
 }
 
 function checkFileFormat(fileHeader) {
-
   const referenceHeader = ['index', 'hlink', 'himage', 'lon', 'lat', 'address', 'price', 'sqm'];
-
   return arrayEquals(referenceHeader, fileHeader);
-
 }
 
 export const useLocations = defineStore({
@@ -33,7 +30,6 @@ export const useLocations = defineStore({
   actions: {
     onChangeF(event) {
 
-
       //load of the Excel File of Houses available
       this.file = event.target.files ? event.target.files[0] : null;
       if (this.file) {
@@ -46,7 +42,6 @@ export const useLocations = defineStore({
           /* Get first worksheet */
           const wsname = wb.SheetNames[0];
           const ws = wb.Sheets[wsname];
-
 
           /* Convert array of arrays */
           const data = XLSX.utils.sheet_to_json(ws, { header: 1 });
@@ -63,10 +58,7 @@ export const useLocations = defineStore({
           else {
             console.log("File format is not matching requirements");
           }
-
-
         }
-
         reader.readAsBinaryString(this.file);
       }
     },
@@ -80,14 +72,11 @@ export const useLocations = defineStore({
       /*These data are essential for the calcuation: test of their existence*/
       const testDataForSubmission =  [uploadedLocations.length == 0, selectedPois.length == 0].some(el => el == true);
 
-
       /** Loop on the differen POIs */
       if (api.getConfirmation()) {
         if (!testDataForSubmission) {
 
           const queryObject = { "pois": selectedPois , "houses": uploadedLocations };
-
-          console.log(queryObject);
 
             //post request
             axios
@@ -96,11 +85,8 @@ export const useLocations = defineStore({
 
                 //composing functions: with the solution set of the indexes we should filter-in the houses of our interest
                 this.$state.solutions =  res.data
-
               ));
-
           }
-        
       } else { console.log("The KEY for the API was not inserted and confirmed") }
 
     },

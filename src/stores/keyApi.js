@@ -10,7 +10,6 @@ export const useKeyApi = defineStore({
   }),
   actions: {
     confirmKey(){
-      console.log("key was confirmed");
       this.$patch(
         {
           ConfirmedAPIstring: this.$state.InsertedAPIstring
@@ -19,10 +18,8 @@ export const useKeyApi = defineStore({
     getConfirmation(){
       const confirmation = !(this.$state.ConfirmedAPIstring == "");
       return confirmation
-      
     },
     resetKey(){
-      console.log("key was reset");
       this.$patch(
         {
           InsertedAPIstring : "",
