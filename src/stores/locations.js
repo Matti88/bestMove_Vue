@@ -24,8 +24,10 @@ export const useLocations = defineStore({
   state: () => ({
     locationsList: [],
     solutions: {housesAllPoi: [], poiHouses: []},
+    locationsOnDisplay : [],
     matrixRoutes: {},
-    polygonsList : []
+    polygonsList : [],
+    housesSet : "All Houses"
   }),
   actions: {
     onChangeF(event) {
@@ -52,8 +54,8 @@ export const useLocations = defineStore({
 
             /* Transforming and loading into store*/
             const objects = values.map(data => data.reduce((a, v, i) => ({ ...a, [keys[i]]: v }), {}));
-            this.$state.locationsList = objects;
-
+            //this.$state.locationsList = objects;
+            this.setListOfAllHouses(objects);
           }
           else {
             console.log("File format is not matching requirements");
@@ -126,7 +128,18 @@ export const useLocations = defineStore({
       //returning the array with the matrix of routes distances
       const solutions = this.$state.matrixRoutes;
       return solutions;
-    }
+    },
+    setHousesToDisplay(){
+      if (this.$state.housesSet == "All Houses"){
+        this.$state.locationsOnDisplay = this.$state.locationsList;
+      }else{
+        this.$state.locationsOnDisplay = this.$state.solutions.housesAllPoi;
+      }
+    },
+    setListOfAllHouses(listOfAllHouses){
+        this.$state.housesSet == "All Houses";
+        this.$state.locationsList = listOfAllHouses;
+        this.setHousesToDisplay();
+    }   
   }
-
 })

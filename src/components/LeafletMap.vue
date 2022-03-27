@@ -59,7 +59,7 @@
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         ></l-tile-layer>
         <l-marker
-          v-for="location in locationsList"
+          v-for="location in locationsOnDisplay"
           :key="location.index"
           :lat-lng="[location.lat, location.lon]"
         >
@@ -108,13 +108,13 @@ export default {
   setup() {
     const locations = useLocations();
     const poi = usePoiApi();
-    const { locationsList, solutions } = storeToRefs(locations);
+    const { locationsOnDisplay, solutions } = storeToRefs(locations);
     const { poiArea } = storeToRefs(poi);
     const zoomM = ref(13);
 
     return {
       zoomM,
-      locationsList,
+      locationsOnDisplay,
       solutions,
       poiArea,
       icon: icon({

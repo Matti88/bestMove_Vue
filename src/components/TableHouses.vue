@@ -9,24 +9,6 @@
     :messages="table.messages" 
     @is-finished="table.isLoading = false"
   ></table-lite>
-    <!-- <div v-for="loc in locationsList" :key="loc.index">
-      <b-card no-body class="overflow-hidden" style="max-width: 540px;">
-        <b-row no-gutters>
-          <b-col md="6">
-            <b-card-img  v-bind:src="loc.himage" alt="Image" class="rounded-0"></b-card-img>
-          </b-col>
-          <b-col md="6">
-            <b-card-body v-bind:title="loc.address">
-              <b-card-text>
-                <p>Price: {{loc.price}}</p>
-                <p>Sqm: {{loc.sqm}}</p>
-              </b-card-text>
-            </b-card-body>
-          </b-col>
-        </b-row>
-      </b-card>
-    </div> -->
-
 </div>
 </template>
 
