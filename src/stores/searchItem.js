@@ -3,6 +3,7 @@
 import { defineStore } from 'pinia'
 import { useKeyApi } from './keyApi'
 import { usePoiApi } from './poi'
+import { useLocations} from './locations'
 import axios from "axios";
 
 class stackObject {
@@ -84,7 +85,8 @@ export const useSearchItems = defineStore({
 
         },
         commitPOIresult() {
-            const poiApi = usePoiApi()
+            const poiApi = usePoiApi();
+            const locts = useLocations();
 
             /* Check all values are non-null */
             const arrayTestSufficientValues = [
@@ -106,11 +108,9 @@ export const useSearchItems = defineStore({
                         color: this.$state.color
                     }
 
-                }
-                console.log(poi_obj.isoParams.color);
-                
+                } 
                 poiApi.addPoi(poi_obj);
-
+                locts.searchOptimal();
                 this.$reset();
             }
             else {

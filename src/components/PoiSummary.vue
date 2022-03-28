@@ -4,7 +4,7 @@
       <h5>POI Summary</h5>
       <Card
         v-for="result in poiArea"
-        :key="result.poi.geoObject.properties.place_id"
+        :key="result.poi.id"
       >
         <template #content>
           <div class="grid p-fluid">
@@ -19,8 +19,8 @@
                 {{ result.poi.isoParams.range.name }}
               </span>
               <Button
-                :id="result.poi.geoObject.properties.place_id"
-                @click="removePois(result.poi.geoObject.properties.place_id)"
+                :id="result.poi.id"
+                @click="removePois(result.poi.id)"
               >
                 remove
               </Button>

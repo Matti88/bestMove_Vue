@@ -27,6 +27,7 @@ export default defineComponent({
       printMatrix,
       printSearch ,     setHousesToDisplay
     } = locations;
+    
     const {housesSet} = storeToRefs(locations);
 
     const options = ref(['Houses Filtered POI', 'All Houses']);

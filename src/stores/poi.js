@@ -16,6 +16,8 @@ export const usePoiApi = defineStore({
       //adding a given POI to the POI array
       if (api.getConfirmation()) {
 
+            poiObject.id = this.$state.poiArea.length + 1;
+  
             this.$state.solutions = [];
             //post request
             axios
@@ -31,7 +33,8 @@ export const usePoiApi = defineStore({
       return(POIs);
     },
     removePois(id_){ 
-      const poiRemoved = this.$state.poiArea.filter((l) => l.poi.geoObject.properties.place_id != id_);
+      console.log(id_);
+      const poiRemoved = this.$state.poiArea.filter((l) => l.poi.id != id_);
       this.$state.poiArea = poiRemoved;
   }},    
 

@@ -88,6 +88,12 @@ export const useLocations = defineStore({
                 //composing functions: with the solution set of the indexes we should filter-in the houses of our interest
                 this.$state.solutions =  res.data
               ));
+
+          if (this.$state.housesSet != "All Houses"){
+            this.$state.locationsOnDisplay = this.$state.solutions.housesAllPoi;
+          }
+      
+
           }
       } else { console.log("The KEY for the API was not inserted and confirmed") }
 
@@ -130,9 +136,13 @@ export const useLocations = defineStore({
       return solutions;
     },
     setHousesToDisplay(){
+
+      console.log("using this function: "  + this.$state.housesSet);
+
       if (this.$state.housesSet == "All Houses"){
         this.$state.locationsOnDisplay = this.$state.locationsList;
       }else{
+        this.searchOptimal();
         this.$state.locationsOnDisplay = this.$state.solutions.housesAllPoi;
       }
     },
