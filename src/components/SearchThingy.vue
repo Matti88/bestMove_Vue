@@ -1,16 +1,12 @@
 <template>
   <div class="card p-fluid">
     <h5>Point Of Interest</h5>
-    <div class="field grid">
-      
-     <label for="name3" class="col-12 mb-2 md:col-2 md:mb-0">Address</label>
-      <div class="col-12 md:col-10">
-      
+    <div class="field">
+      <div class="col-12 md:col-12">
         <span class="p-input-icon-left">
           <i class="pi pi-search" />
-          <InputText type="text" v-model="searchString" />
+          <InputText type="text" v-model="searchString"  placeholder="Address" />
         </span>
-
         <ul v-show="isOpen">
           <li
             v-for="result in results"
@@ -22,31 +18,26 @@
         </ul>
       </div>
     </div>
-    <div class="field grid">
-      <label for="email3" class="col-12 mb-2 md:col-2 md:mb-0">Timing</label>
-      <div class="col-12 md:col-10">
+    <div class="field">
+      <div class="col-12 md:col-12">
         <Dropdown
           v-model="range"
           :options="timeRanges"
           optionLabel="name"
-          placeholder="No Time"
+          placeholder="Travel Time"
         />
       </div>
     </div>
-
-    <div class="field grid">
-      <label for="email3" class="col-12 mb-2 md:col-2 md:mb-0">Transport</label>
-      <div class="col-12 md:col-10">
+    <div class="field">
+      <div class="col-12 md:col-12">
         <SelectButton
           v-model="mode"
           :options="modeTransport"
           optionLabel="name"
         />
       </div>
-    </div>
-
-    <h5>Commit POI</h5>
-    <Button label="Commit" @click="commitPOIresult" ></Button>
+    </div> 
+    <Button label="Add" @click="commitPOIresult" ></Button>
   </div>
 </template>
 

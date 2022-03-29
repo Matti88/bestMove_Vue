@@ -1,11 +1,11 @@
 <template>
   <div class="grid">
-    <div class="col-12 lg:col-3 xl:col-3">
+    <div class="col-12 lg:col-3 xl:col-2">
       <SearchThingy />
       <PoiSummary />
       <RoutesAreasOps />
     </div>
-    <div class="col-12 lg:col-9 xl:col-9">
+    <div class="col-12 lg:col-9 xl:col-10">
       <div class="card mb-0">
         <LeafletMap />
       </div>
