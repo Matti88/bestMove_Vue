@@ -1,12 +1,14 @@
 <template>
 	<div class="layout-topbar">
-		<router-link to="/" class="layout-topbar-logo">
-			<img alt="Logo" :src="topbarImage()" />
-			<span>SAKAI</span>
+		<router-link to="/" class="layout-topbar-logo">	
+			<span>Home</span>
 		</router-link>
-		<button class="p-link layout-menu-button layout-topbar-button" @click="onMenuToggle">
-			<i class="pi pi-bars"></i>
-		</button>
+		<router-link to="/ApiKeyInsert" class="layout-topbar-logo">
+			<span>File Page</span>
+		</router-link>
+		<router-link to="/FileAndTable" class="layout-topbar-logo">
+			<span>API Insert</span>
+		</router-link>				
 
 		<button class="p-link layout-topbar-menu-button layout-topbar-button"
 			v-styleclass="{ selector: '@next', enterClass: 'hidden', enterActiveClass: 'scalein', 
