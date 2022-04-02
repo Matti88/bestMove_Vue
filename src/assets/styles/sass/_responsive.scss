@@ -2,8 +2,8 @@
     .layout-wrapper {
         &.layout-overlay {
             .layout-main-container {
-                margin-left: 0;
-                padding-left: 2rem;
+                margin: 1.25rem;
+                padding: 2rem;
             }
 
             .layout-sidebar {
@@ -24,7 +24,7 @@
 
         &.layout-static {
             .layout-main-container {
-                margin-left: 300px;
+                margin: 1.25rem;
             }
 
             &.layout-static-sidebar-inactive {
@@ -34,8 +34,8 @@
                 }
 
                 .layout-main-container {
-                    margin-left: 0;
-                    padding-left: 2rem;
+                    margin: 1.25rem;
+                    padding: 2rem;
                 }
             }
         }
@@ -49,8 +49,8 @@
 @media (max-width: 991px) {
     .layout-wrapper {
         .layout-main-container {
-            margin-left: 0;
-            padding-left: 2rem;
+            margin: 1.25rem;
+            padding: 2rem;
         }
 
         .layout-sidebar {

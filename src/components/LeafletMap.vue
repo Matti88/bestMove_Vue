@@ -1,9 +1,9 @@
 <template>
   <div style="height: 750px; width: auto">
     <l-map :zoom="zoomM" :center="[48.1871387, 16.3577628]">
-        <l-tile-layer
-          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-        ></l-tile-layer>
+      <l-tile-layer
+        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+      ></l-tile-layer>
       <div v-if="poiArea.length > 0">
         <l-geo-json
           v-for="poi in poiArea"
@@ -23,17 +23,23 @@
         >
         </l-marker>
       </div>
-        <l-geo-json
-          v-for="poi in poiArea"
-          :key="poi.geoApify.properties.id"
-          :geojson="poi.geoApify"
-          :options="{ color: poi.poi.isoParams.color }"
-        ></l-geo-json>
-        <l-marker
-          v-for="location in locationsOnDisplay"
-          :key="location.index"
-          :lat-lng="[location.lat, location.lon]"
-        >
+      <l-geo-json
+        v-for="poi in poiArea"
+        :key="poi.geoApify.properties.id"
+        :geojson="poi.geoApify"
+        :options="{ color: poi.poi.isoParams.color }"
+      ></l-geo-json>
+
+      <div v-for="location in locationsOnDisplay" :key="location.index">
+        <!-- if this is ON zoom -->
+        <div v-if="location.zoom == true ">
+          <l-marker :lat-lng="[location.lat, location.lon]" :icon="house" :zIndexOffset="poiArea.length * 1000">
+          </l-marker>
+        </div>
+
+        <!-- if this is not on zoom -->
+        <div v-else> 
+        <l-marker :lat-lng="[location.lat, location.lon]">
           <l-popup>
             <a v-bind:href="location.hlink">
               <img
@@ -48,11 +54,17 @@
             <p>Area: {{ location.sqm }}</p>
           </l-popup>
         </l-marker>
-        
+        </div>
+      </div>
+
 
     </l-map>
   </div>
 </template>
+
+
+
+
 <script>
 import {
   LMap,
@@ -84,7 +96,7 @@ export default {
     const { poiArea } = storeToRefs(poi);
     const zoomM = ref(13);
 
-    watch(locationsOnDisplay, () => (console.log("changes on elements")));
+    watch(locationsOnDisplay, () => console.log("changes on elements"));
 
     return {
       zoomM,

@@ -1,18 +1,27 @@
 <template>
-  <div class="grid">
-    <div class="col-12 lg:col-3 xl:col-2">
-      <SearchThingy />
-      <PoiSummary />
-      <RoutesAreasOps />
-    </div>
-    <div class="col-12 lg:col-9 xl:col-10">
-      <div class="card mb-0">
-        <LeafletMap />
+  <div >
+
+    <div class="grid">
+      <div class="col-12 lg:col-3 xl:col-2">
+        <SearchThingy />
+        <PoiSummary />
+        <RoutesAreasOps />
       </div>
-      <div>
-        <OverlaySidebar />
+      <div class="col-12 lg:col-9 xl:col-10">
+        <div class="card mb-0">
+
+          <div class="card-header">
+          <OverlaySidebar />
+          </div>
+
+          <div class="card-content">
+          <LeafletMap />
+          </div>
+
+        </div>
       </div>
     </div>
+    
   </div>
 </template>
 
@@ -221,6 +230,3 @@ export default {
   },
 };
 </script>
-
- 
- 

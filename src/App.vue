@@ -21,9 +21,12 @@
         </template>
       </Menubar>
     </div>
+      <div className="layout-main-container">
     <div class="layout-main">
       <router-view />
     </div>
+    </div>
+    
     <AppFooter />
     <AppConfig :layoutMode="layoutMode" @layout-change="onLayoutChange" />
     <transition name="layout-mask">
@@ -200,8 +203,6 @@ export default {
 
 <style lang="scss">
 @import "./App.scss";
-
-.topbar {
-  margin-bottom: 20px;
-}
+ 
+ 
 </style>

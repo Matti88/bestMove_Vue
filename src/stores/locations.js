@@ -23,11 +23,11 @@ export const useLocations = defineStore({
   id: 'locations',
   state: () => ({
     locationsList: [],
-    solutions: {housesAllPoi: [], poiHouses: []},
-    locationsOnDisplay : [],
+    solutions: { housesAllPoi: [], poiHouses: [] },
+    locationsOnDisplay: [],
     matrixRoutes: {},
-    polygonsList : [],
-    housesSet : "All Houses"
+    polygonsList: [],
+    housesSet: "All Houses"
   }),
   actions: {
     onChangeF(event) {
@@ -72,29 +72,30 @@ export const useLocations = defineStore({
       const selectedPois = JSON.parse(JSON.stringify(poiApi.getPois()));
 
       /*These data are essential for the calcuation: test of their existence*/
-      const testDataForSubmission =  [uploadedLocations.length == 0, selectedPois.length == 0].some(el => el == true);
+      const testDataForSubmission = [uploadedLocations.length == 0, selectedPois.length == 0].some(el => el == true);
 
       /** Loop on the differen POIs */
       if (api.getConfirmation()) {
         if (!testDataForSubmission) {
 
-          const queryObject = { "pois": selectedPois , "houses": uploadedLocations };
+          const queryObject = { "pois": selectedPois, "houses": uploadedLocations };
 
-            //post request
-            axios
-              .post(`http://0.0.0.0:3001/api/filteredByIsoArea?API_KEY=${api.ConfirmedAPIstring}`, queryObject)
-              .then((res) => (
+          //post request
+          axios
+            .post(`http://0.0.0.0:3001/api/filteredByIsoArea?API_KEY=${api.ConfirmedAPIstring}`, queryObject)
+            .then((res) => (
 
-                //composing functions: with the solution set of the indexes we should filter-in the houses of our interest
-                this.$state.solutions =  res.data
-              ));
+              //composing functions: with the solution set of the indexes we should filter-in the houses of our interest
+              this.$state.solutions = res.data
+            ));
 
-          if (this.$state.housesSet != "All Houses"){
-            this.$state.locationsOnDisplay = this.$state.solutions.housesAllPoi;
+          if (this.$state.housesSet != "All Houses") {
+            // this.$state.locationsOnDisplay = this.$state.solutions.housesAllPoi;
+            this.$state.locationsOnDisplay = this.$state.solutions.housesAllPoi.map(obj => ({ ...obj, focus: false }))
           }
-      
 
-          }
+
+        }
       } else { console.log("The KEY for the API was not inserted and confirmed") }
 
     },
@@ -113,8 +114,8 @@ export const useLocations = defineStore({
       if (api.getConfirmation()) {
         if (!testDataForSubmission) {
           const sources_ = solutionsHouses.map((house) => ({ "location": [house.lon, house.lat] }));
-          const targets_ = selectedPois.map((house) => ({ "location": [house.lon, house.lat] }));  
-          const bestMoveMatrixObj = { "matrix": { "mode": "drive", "sources": sources_, "targets":  targets_ }, "houses": solutionsHouses };
+          const targets_ = selectedPois.map((house) => ({ "location": [house.lon, house.lat] }));
+          const bestMoveMatrixObj = { "matrix": { "mode": "drive", "sources": sources_, "targets": targets_ }, "houses": solutionsHouses };
 
           //post request
           axios
@@ -135,21 +136,32 @@ export const useLocations = defineStore({
       const solutions = this.$state.matrixRoutes;
       return solutions;
     },
-    setHousesToDisplay(){
+    setHousesToDisplay() {
 
-      console.log("using this function: "  + this.$state.housesSet);
+      console.log("using this function: " + this.$state.housesSet);
 
-      if (this.$state.housesSet == "All Houses"){
-        this.$state.locationsOnDisplay = this.$state.locationsList;
-      }else{
+      if (this.$state.housesSet == "All Houses") {
+        // this.$state.locationsOnDisplay = this.$state.locationsList;
+        this.$state.locationsOnDisplay = this.$state.locationsList.map(obj => ({ ...obj, focus: false }))
+
+      } else {
         this.searchOptimal();
-        this.$state.locationsOnDisplay = this.$state.solutions.housesAllPoi;
+        // this.$state.locationsOnDisplay = this.$state.solutions.housesAllPoi;
+        this.$state.locationsOnDisplay = this.$state.solutions.housesAllPoi.map(obj => ({ ...obj, focus: false }))
       }
     },
-    setListOfAllHouses(listOfAllHouses){
-        this.$state.housesSet == "All Houses";
-        this.$state.locationsList = listOfAllHouses;
-        this.setHousesToDisplay();
-    }   
+    setListOfAllHouses(listOfAllHouses) {
+      this.$state.housesSet == "All Houses";
+      // this.$state.locationsList = listOfAllHouses;
+      this.$state.locationsList = listOfAllHouses.map(obj => ({ ...obj, focus: false }))
+      this.setHousesToDisplay();
+    },
+    setOnZoom(indexOnZoom) {
+      this.$state.locationsOnDisplay = this.$state.locationsOnDisplay.map( c => (c.index==indexOnZoom) ? { ...c, zoom : true } : {...c} )
+    },
+    unSetOnZoom(indexOnZoom) {
+      this.$state.locationsOnDisplay = this.$state.locationsOnDisplay.map( c => (c.index==indexOnZoom) ? { ...c, zoom : false } : {...c} )
+    },
+
   }
 })
