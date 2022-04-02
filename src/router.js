@@ -9,8 +9,8 @@ const routes = [
         children: [
             {
                 path: '/',
-                name: 'Dashboard',
-                component: () => import('./components/Dashboard.vue')
+                name: 'DashBoard',
+                component: () => import('./components/DashBoard.vue')
             },
             {
                 path: '/ApiKeyInsert',

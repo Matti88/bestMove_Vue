@@ -1,8 +1,8 @@
 <template>
   <div :class="containerClass">
-    <div>
+    <div class="layout-top">
       <Menubar :class="topbar" :model="items">
-        <template #item="{ item }">
+        <template >
           <router-link
             :to="item.to"
             custom

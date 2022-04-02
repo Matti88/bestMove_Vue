@@ -9,6 +9,9 @@
       <div class="card mb-0">
         <LeafletMap />
       </div>
+      <div>
+        <OverlaySidebar />
+      </div>
     </div>
   </div>
 </template>
@@ -23,6 +26,7 @@ import PoiSummary from "./PoiSummary.vue";
 import LeafletMap from "./LeafletMap.vue";
 import CountryService from "../service/CountryService";
 import NodeService from "../service/NodeService";
+import OverlaySidebar from "./OverlaySidebar.vue";
 
 export default {
   components: {
@@ -30,6 +34,7 @@ export default {
     RoutesAreasOps,
     PoiSummary,
     LeafletMap,
+    OverlaySidebar,
   },
 
   data() {
