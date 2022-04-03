@@ -168,7 +168,7 @@ export const useLocations = defineStore({
         this.searchOptimal();
         // this.$state.locationsOnDisplay = this.$state.solutions.housesAllPoi;
         this.$state.locationsOnDisplay = this.$state.solutions.housesAllPoi.map(obj => ({ ...obj, focus: false }))
-        this.recalcPOIonDisplay()
+      
 
       }
     },
