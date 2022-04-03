@@ -5,14 +5,7 @@ import { defineStore } from 'pinia'
 import { useKeyApi } from './keyApi'
 import { usePoiApi } from './poi'
 import axios from "axios";
-
-// function printStuffAndAdd(house, list){
-
-//   console.log(house);
-//   console.log(list);
-
-// }
-
+ 
 
 function arrayEquals(a, b) {
   return Array.isArray(a) &&
@@ -37,8 +30,21 @@ export const useLocations = defineStore({
     polygonsList: [],
     housesSet: "All Houses",
     filters: {
-      priceRent: 570
-      , prices: [{ item: 100, label: 100 }, { item: 200, label: 300 }, { item: 300, label: 300 }, { item: 600, label: 600 }, { item: 700, label: 700 }]
+        priceRent: 570
+      , prices: [
+          { item: 100, label: 100 }
+        , { item: 200, label: 200 }
+        , { item: 300, label: 300 }
+        , { item: 600, label: 600 }
+        , { item: 700, label: 700 }
+        , { item: 800, label: 800 }
+        , { item: 900, label: 900 }
+        , { item: 1000, label: 1000 }
+        , { item: 1100, label: 1100 }      
+        , { item: 1200, label: 1200 }
+        , { item: 1300, label: 1300 }        
+        , { item: 2200, label: 2200 }                
+      ]
       , sqmRent: 70
       , sqm: [{ item: 10, label: 10 }, { item: 20, label: 20 }, { item: 30, label: 30 }, { item: 60, label: 60 }, { item: 70, label: 70 }]
       , selectedPoisIndexes : []
@@ -105,10 +111,8 @@ export const useLocations = defineStore({
               this.$state.solutions = res.data
             ));
 
-          if (this.$state.housesSet != "All Houses") {
-            // this.$state.locationsOnDisplay = this.$state.solutions.housesAllPoi;
-            this.$state.locationsOnDisplay = this.$state.solutions.housesAllPoi.map(obj => ({ ...obj, focus: false }))
-          }
+          //triggering it all time this is is called?
+          this.$state.locationsOnDisplay = this.$state.solutions.housesAllPoi.map(obj => ({ ...obj, focus: false }))
 
           //updatind the pois that can be used as filters
           this.poisChoiceUpdate();
@@ -160,16 +164,13 @@ export const useLocations = defineStore({
 
       console.log("using this function: " + this.$state.housesSet);
 
-      if (this.$state.housesSet == "All Houses") {
-        // this.$state.locationsOnDisplay = this.$state.locationsList;
+      if (this.$state.housesSet === "All Houses") {
+        console.log("Set to 'All Houses");
         this.$state.locationsOnDisplay = this.$state.locationsList.map(obj => ({ ...obj, focus: false }))
 
       } else {
-        this.searchOptimal();
-        // this.$state.locationsOnDisplay = this.$state.solutions.housesAllPoi;
-        this.$state.locationsOnDisplay = this.$state.solutions.housesAllPoi.map(obj => ({ ...obj, focus: false }))
-      
-
+        console.log("NOT Set to 'All Houses");
+        this.searchOptimal();       
       }
     },
     setListOfAllHouses(listOfAllHouses) {
@@ -184,7 +185,6 @@ export const useLocations = defineStore({
     unSetOnZoom(indexOnZoom) {
       this.$state.locationsOnDisplay = this.$state.locationsOnDisplay.map(c => (c.index == indexOnZoom) ? { ...c, zoom: false } : { ...c })
     },
-
     poisChoiceUpdate() {
 
       this.$state.filters.poiIndexes
@@ -193,6 +193,24 @@ export const useLocations = defineStore({
             poiId: c.poi.poi.id, label: c.poi.poi.geoObject.properties.name + " - " + c.poi.poi.isoParams.mode.name + " - " + c.poi.poi.isoParams.range.name
           }))
           
+    },
+    applyFilters(){
+
+      const newReferencePrice = this.$state.filters.priceRent.item;
+      const priceFiltering = (houseObj) => (houseObj.price <= newReferencePrice )? true: false;
+
+      if (this.$state.housesSet === 'All Houses'){
+        
+        console.log('refresing filtering on all hosues ');
+        this.$state.locationsOnDisplay = this.$state.locationsList.map(obj => ({ ...obj, focus: false })).filter(priceFiltering)
+        
+      }
+      else{
+        console.log('refresing filtering on hosues of the areas ');
+        this.$state.locationsOnDisplay = this.$state.solutions.housesAllPoi.map(obj => ({ ...obj, focus: false })).filter(priceFiltering)
+        
+      }
+        
     }
 
   }

@@ -18,6 +18,7 @@
               :options="filters.prices"
               optionLabel="label"
               :editable="true"
+              @change ="applyFilters"
             />
           </div>
           <div class="col-6">
@@ -83,31 +84,20 @@ export default {
   },
   setup() {
     const locations = useLocations();
-    const { unSetOnZoom, setOnZoom } = locations;
-    const { locationsOnDisplay, filters } = storeToRefs(locations);
+    const { unSetOnZoom, setOnZoom, applyFilters } = locations;
+    const { locationsOnDisplay, filters} = storeToRefs(locations);
 
     //parts that are going to be solved with PINIA
-    // const value5 = ref([20,80]);
     const visibleRight = ref(false);
-    const selectedCities1 = ref();
-    const cities = ref([
-      { name: "New York", code: "NY" },
-      { name: "Rome", code: "RM" },
-      { name: "London", code: "LDN" },
-      { name: "Istanbul", code: "IST" },
-      { name: "Paris", code: "PRS" },
-    ]); 
-
+  
     return {
       unSetOnZoom,
       setOnZoom,
       locationsOnDisplay,
-
+      applyFilters,
       filters,
       visibleRight,
 
-      selectedCities1,
-      cities,
     };
   },
 };
