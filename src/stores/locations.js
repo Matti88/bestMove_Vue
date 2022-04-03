@@ -5,13 +5,23 @@ import { defineStore } from 'pinia'
 import { useKeyApi } from './keyApi'
 import { usePoiApi } from './poi'
 import axios from "axios";
- 
+
 
 function arrayEquals(a, b) {
   return Array.isArray(a) &&
     Array.isArray(b) &&
     a.length === b.length &&
     a.every((val, index) => val === b[index]);
+}
+
+function intersect(arr1, arr2) {
+  console.log(arr1, arr2);
+  var intersections = arr1.filter(e => arr2.indexOf(e) !== -1)
+  if (intersections.length > 0) {
+    return true
+  } 
+  else 
+  { return false }
 }
 
 function checkFileFormat(fileHeader) {
@@ -30,9 +40,9 @@ export const useLocations = defineStore({
     polygonsList: [],
     housesSet: "All Houses",
     filters: {
-        priceRent: 570
+      priceRent: { item: 900, label: 900 }
       , prices: [
-          { item: 100, label: 100 }
+        { item: 100, label: 100 }
         , { item: 200, label: 200 }
         , { item: 300, label: 300 }
         , { item: 600, label: 600 }
@@ -40,14 +50,27 @@ export const useLocations = defineStore({
         , { item: 800, label: 800 }
         , { item: 900, label: 900 }
         , { item: 1000, label: 1000 }
-        , { item: 1100, label: 1100 }      
+        , { item: 1100, label: 1100 }
         , { item: 1200, label: 1200 }
-        , { item: 1300, label: 1300 }        
-        , { item: 2200, label: 2200 }                
+        , { item: 1300, label: 1300 }
+        , { item: 2200, label: 2200 }
+        , { item: 5000, label: 5000 }
+        , { item: 10000, label: 10000 }
       ]
-      , sqmRent: 70
-      , sqm: [{ item: 10, label: 10 }, { item: 20, label: 20 }, { item: 30, label: 30 }, { item: 60, label: 60 }, { item: 70, label: 70 }]
-      , selectedPoisIndexes : []
+      , sqmRent: { item: 80, label: 80 }
+      , sqm: [{ item: 10, label: 10 }
+        , { item: 20, label: 20 }
+        , { item: 30, label: 30 }
+        , { item: 60, label: 60 }
+        , { item: 70, label: 70 }
+        , { item: 80, label: 80 }
+        , { item: 90, label: 90 }
+        , { item: 100, label: 100 }
+        , { item: 110, label: 110 }
+
+
+      ]
+      , selectedPoisIndexes: []
       , poiIndexes: []
     }
   }),
@@ -170,7 +193,7 @@ export const useLocations = defineStore({
 
       } else {
         console.log("NOT Set to 'All Houses");
-        this.searchOptimal();       
+        this.searchOptimal();
       }
     },
     setListOfAllHouses(listOfAllHouses) {
@@ -192,25 +215,54 @@ export const useLocations = defineStore({
           c => ({
             poiId: c.poi.poi.id, label: c.poi.poi.geoObject.properties.name + " - " + c.poi.poi.isoParams.mode.name + " - " + c.poi.poi.isoParams.range.name
           }))
-          
+
+      this.$state.filters.selectedPoisIndexes = this.$state.filters.poiIndexes;
     },
-    applyFilters(){
+    applyFilters() {
 
       const newReferencePrice = this.$state.filters.priceRent.item;
-      const priceFiltering = (houseObj) => (houseObj.price <= newReferencePrice )? true: false;
+      const priceFiltering = (houseObj) => (houseObj.price <= newReferencePrice) ? true : false;
 
-      if (this.$state.housesSet === 'All Houses'){
-        
+      const newSqm = this.$state.filters.sqmRent.item;
+      const sqmFiltering = (houseObj) => (houseObj.sqm > newSqm) ? true : false;
+
+      //conditoonally serve one or another filter for POI
+      const newPoiSet = this.$state.filters.selectedPoisIndexes.map((poi) => poi.poiId);
+      console.log(newPoiSet);
+      function ifPoiFiltering(arrayOfpoi){
+        const poiFiltering = (houseObj) => intersect( newPoiSet, houseObj.poiId);
+        const poiFiltering2 = () => true;
+        if ( arrayOfpoi > 0) {
+          return poiFiltering
+        }
+        else {
+          return poiFiltering2
+        }
+      } 
+      const finalPoiFilterig = ifPoiFiltering(this.$state.filters.poiIndexes.length);
+      console.log(finalPoiFilterig);
+
+      if (this.$state.housesSet === 'All Houses') {
+
         console.log('refresing filtering on all hosues ');
-        this.$state.locationsOnDisplay = this.$state.locationsList.map(obj => ({ ...obj, focus: false })).filter(priceFiltering)
-        
+        const filteredItems = this.$state.locationsList.map(obj => ({ ...obj, focus: false }))
+          .filter(priceFiltering)
+          .filter(sqmFiltering)
+          .filter(finalPoiFilterig);
+        console.log(filteredItems);
+        this.$state.locationsOnDisplay = filteredItems;
+
       }
-      else{
+      else {
         console.log('refresing filtering on hosues of the areas ');
-        this.$state.locationsOnDisplay = this.$state.solutions.housesAllPoi.map(obj => ({ ...obj, focus: false })).filter(priceFiltering)
-        
+        const filteredItems = this.$state.solutions.housesAllPoi.map(obj => ({ ...obj, focus: false }))
+          .filter(priceFiltering)
+          .filter(sqmFiltering)
+          .filter(finalPoiFilterig);
+        this.$state.locationsOnDisplay = filteredItems;
+
       }
-        
+
     }
 
   }

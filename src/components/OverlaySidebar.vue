@@ -28,6 +28,7 @@
               :options="filters.sqm"
               optionLabel="label"
               :editable="true"
+              @change ="applyFilters"
             />
           </div>
         </div>
@@ -38,6 +39,7 @@
           :options="filters.poiIndexes"
           optionLabel="label"
           placeholder="Select related POIs"
+          @change ="applyFilters"
         />
       </div>
       <!-- probably  going to be a standalone component   -->
