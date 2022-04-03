@@ -28,7 +28,7 @@
     </div>
     
     <AppFooter />
-    <AppConfig :layoutMode="layoutMode" @layout-change="onLayoutChange" />
+    <!-- <AppConfig :layoutMode="layoutMode" @layout-change="onLayoutChange" /> -->
     <transition name="layout-mask">
       <div
         class="layout-mask p-component-overlay"
@@ -39,7 +39,7 @@
 </template>
 
 <script>
-import AppConfig from "./AppConfig.vue";
+// import AppConfig from "./AppConfig.vue";
 import AppFooter from "./AppFooter.vue";
 
 export default {
@@ -195,7 +195,7 @@ export default {
     else this.removeClass(document.body, "body-overflow-hidden");
   },
   components: {
-    AppConfig: AppConfig,
+    // AppConfig: AppConfig,
     AppFooter: AppFooter,
   },
 };
