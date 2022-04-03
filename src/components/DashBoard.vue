@@ -8,12 +8,16 @@
         <RoutesAreasOps />
       </div>
       <div class="col-12 lg:col-9 xl:col-10">
+        
         <div class="card mb-0">
-
+        
           <div class="card-header">
+          <div class="grid" style="align:right">
           <OverlaySidebar />
+        
+          </div>        
           </div>
-
+          <Divider />
           <div class="card-content">
           <LeafletMap />
           </div>

@@ -14,7 +14,7 @@
     <div class="col-12">
       <div class="card">
         <h5>Loaded Houses</h5>
-          <DataTable :value="locations.locationsList" sortField="dynamicSortField" :sortOrder="dynamicSortOrder">
+          <DataTable :value="locations.locationsList" sortField="dynamicSortField" >
             <Column field="address" header="address" :sortable="true"></Column>
             <Column field="price" header="price" :sortable="true"></Column>
             <Column field="sqm" header="sqm" :sortable="true"></Column>

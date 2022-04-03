@@ -1,7 +1,7 @@
 <template>
   <div :class="containerClass">
     <div class="layout-top">
-      <Menubar :class="topbar" :model="items">
+      <Menubar  :model="items">
         <template >
           <router-link
             :to="item.to"

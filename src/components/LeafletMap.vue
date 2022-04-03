@@ -33,7 +33,7 @@
       <div v-for="location in locationsOnDisplay" :key="location.index">
         <!-- if this is ON zoom -->
         <div v-if="location.zoom == true ">
-          <l-marker :lat-lng="[location.lat, location.lon]" :icon="house" :zIndexOffset="poiArea.length * 1000">
+          <l-marker :lat-lng="[location.lat, location.lon]" :icon="house" :zIndexOffset="poiArea.length * 100">
           </l-marker>
         </div>
 
@@ -76,7 +76,7 @@ import {
 import "leaflet/dist/leaflet.css";
 import { useLocations } from "@/stores/locations";
 import { usePoiApi } from "@/stores/poi";
-import { ref, watch } from "vue";
+import { ref,  } from "vue";
 import { storeToRefs } from "pinia";
 import { icon } from "leaflet";
 
@@ -95,8 +95,7 @@ export default {
     const { locationsOnDisplay, solutions } = storeToRefs(locations);
     const { poiArea } = storeToRefs(poi);
     const zoomM = ref(13);
-
-    watch(locationsOnDisplay, () => console.log("changes on elements"));
+ 
 
     return {
       zoomM,

@@ -6,6 +6,14 @@ import { useKeyApi } from './keyApi'
 import { usePoiApi } from './poi'
 import axios from "axios";
 
+// function printStuffAndAdd(house, list){
+
+//   console.log(house);
+//   console.log(list);
+
+// }
+
+
 function arrayEquals(a, b) {
   return Array.isArray(a) &&
     Array.isArray(b) &&
@@ -27,7 +35,15 @@ export const useLocations = defineStore({
     locationsOnDisplay: [],
     matrixRoutes: {},
     polygonsList: [],
-    housesSet: "All Houses"
+    housesSet: "All Houses",
+    filters: {
+      priceRent: 570
+      , prices: [{ item: 100, label: 100 }, { item: 200, label: 300 }, { item: 300, label: 300 }, { item: 600, label: 600 }, { item: 700, label: 700 }]
+      , sqmRent: 70
+      , sqm: [{ item: 10, label: 10 }, { item: 20, label: 20 }, { item: 30, label: 30 }, { item: 60, label: 60 }, { item: 70, label: 70 }]
+      , selectedPoisIndexes : []
+      , poiIndexes: []
+    }
   }),
   actions: {
     onChangeF(event) {
@@ -94,8 +110,12 @@ export const useLocations = defineStore({
             this.$state.locationsOnDisplay = this.$state.solutions.housesAllPoi.map(obj => ({ ...obj, focus: false }))
           }
 
+          //updatind the pois that can be used as filters
+          this.poisChoiceUpdate();
 
         }
+
+
       } else { console.log("The KEY for the API was not inserted and confirmed") }
 
     },
@@ -148,6 +168,8 @@ export const useLocations = defineStore({
         this.searchOptimal();
         // this.$state.locationsOnDisplay = this.$state.solutions.housesAllPoi;
         this.$state.locationsOnDisplay = this.$state.solutions.housesAllPoi.map(obj => ({ ...obj, focus: false }))
+        this.recalcPOIonDisplay()
+
       }
     },
     setListOfAllHouses(listOfAllHouses) {
@@ -157,11 +179,21 @@ export const useLocations = defineStore({
       this.setHousesToDisplay();
     },
     setOnZoom(indexOnZoom) {
-      this.$state.locationsOnDisplay = this.$state.locationsOnDisplay.map( c => (c.index==indexOnZoom) ? { ...c, zoom : true } : {...c} )
+      this.$state.locationsOnDisplay = this.$state.locationsOnDisplay.map(c => (c.index == indexOnZoom) ? { ...c, zoom: true } : { ...c })
     },
     unSetOnZoom(indexOnZoom) {
-      this.$state.locationsOnDisplay = this.$state.locationsOnDisplay.map( c => (c.index==indexOnZoom) ? { ...c, zoom : false } : {...c} )
+      this.$state.locationsOnDisplay = this.$state.locationsOnDisplay.map(c => (c.index == indexOnZoom) ? { ...c, zoom: false } : { ...c })
     },
+
+    poisChoiceUpdate() {
+
+      this.$state.filters.poiIndexes
+        = this.$state.solutions.poiHouses.map(
+          c => ({
+            poiId: c.poi.poi.id, label: c.poi.poi.geoObject.properties.name + " - " + c.poi.poi.isoParams.mode.name + " - " + c.poi.poi.isoParams.range.name
+          }))
+          
+    }
 
   }
 })
