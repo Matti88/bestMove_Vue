@@ -5,7 +5,7 @@
       <div class="col-12 md:col-12">
         <span class="p-input-icon-left">
           <i class="pi pi-search" />
-          <InputText type="text" v-model="searchString"  placeholder="Address" />
+          <InputText type="text" v-model="searchString" @keyup ="queryResults" placeholder="Address" />
         </span>
         <ul v-show="isOpen">
           <li
@@ -46,8 +46,7 @@
 import { storeToRefs } from "pinia";
 import { useSearchItems } from "@/stores/searchItem";
 import { defineComponent } from "@vue/runtime-core";
-import { debounce } from "lodash";
-import { watch } from "vue";
+// import { watch } from "vue";
 
 
 export default defineComponent({
@@ -79,7 +78,6 @@ export default defineComponent({
     const { searchString, results, isOpen, mode, range } = storeToRefs(searchItems);
     const { queryResults, setSingleResults, reset, setMode, commitPOIresult } = searchItems;
 
-    watch(() => searchString.value, debounce(queryResults, 2000));
 
     return {
       searchString,
@@ -91,6 +89,7 @@ export default defineComponent({
       commitPOIresult,
       mode,
       range,
+      queryResults
     };
   },
 });

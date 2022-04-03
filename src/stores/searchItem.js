@@ -5,6 +5,7 @@ import { useKeyApi } from './keyApi'
 import { usePoiApi } from './poi'
 import { useLocations} from './locations'
 import axios from "axios";
+import _ from 'lodash'
 
 class stackObject {
     constructor() {
@@ -50,22 +51,22 @@ export const useSearchItems = defineStore({
         }
     ),
     actions: { 
-        queryResults(eventString) {
+        queryResults :  _.debounce( 
+            function () {
+            
             //query the suggested locations given a string with partial name
             const api = useKeyApi();
             
             if (api.getConfirmation()) {
                 if (!this.$state.selected) {
-                    this.$state.isOpen = true;
-
-                    console.log("received even string: " + eventString);
-
+                    this.$state.isOpen = true;                       
                     axios
-                        .get(`http://0.0.0.0:3001/api/streetToGeo?query=${eventString}&API_KEY=${api.ConfirmedAPIstring}`)
+                        .get(`http://0.0.0.0:3001/api/streetToGeo?query=${this.$state.searchString}&API_KEY=${api.ConfirmedAPIstring}`)
                         .then((response) => (this.$state.results = response.data.features));
                 }
             } else { console.log("The KEY for the API was not inserted and confirmed") }
-        },
+        }
+        , 1000),
 
         setSingleResults(result) {
             //setting up for one of the results of the suggested locations

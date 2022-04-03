@@ -2,32 +2,29 @@
   <div class="card p-fluid">
     <div>
       <h5>POI Summary</h5>
-      <Card
-        v-for="result in poiArea"
-        :key="result.poi.id"
-      >
-        <template #content>
-          <div class="grid p-fluid">
-            <div class="col-12 md:col-12">
-              <h5>{{ result.poi.geoObject.properties.formatted }}</h5>
+      <div v-for="result in poiArea" :key="result.poi.id">
+        <Card>
+          <template #content>
+            <div class="grid p-fluid">
+              <div class="col-12 md:col-12">
+                <p>{{ result.poi.geoObject.properties.formatted }}</p>
+              </div>
+              <div class="p-inputgroup">
+                <span class="p-inputgroup-addon">
+                  {{ result.poi.isoParams.mode.name }}
+                </span>
+                <span class="p-inputgroup-addon">
+                  {{ result.poi.isoParams.range.name }}
+                </span>
+                <Button :id="result.poi.id" @click="removePois(result.poi.id)">
+                  remove
+                </Button>
+              </div>
             </div>
-            <div class="p-inputgroup">
-              <span class="p-inputgroup-addon">
-                {{ result.poi.isoParams.mode.name }}
-              </span>
-              <span class="p-inputgroup-addon">
-                {{ result.poi.isoParams.range.name }}
-              </span>
-              <Button
-                :id="result.poi.id"
-                @click="removePois(result.poi.id)"
-              >
-                remove
-              </Button>
-            </div>
-          </div>
-        </template>
-      </Card>
+          </template>
+        </Card>
+        <Divider />
+      </div>
     </div>
   </div>
 </template> 
