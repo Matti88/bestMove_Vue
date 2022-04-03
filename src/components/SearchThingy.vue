@@ -46,7 +46,6 @@
 import { storeToRefs } from "pinia";
 import { useSearchItems } from "@/stores/searchItem";
 import { defineComponent } from "@vue/runtime-core";
-// import { watch } from "vue";
 
 
 export default defineComponent({

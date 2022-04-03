@@ -15,7 +15,6 @@ function arrayEquals(a, b) {
 }
 
 function intersect(arr1, arr2) {
-  console.log(arr1, arr2);
   var intersections = arr1.filter(e => arr2.indexOf(e) !== -1)
   if (intersections.length > 0) {
     return true
@@ -28,7 +27,7 @@ function checkFileFormat(fileHeader) {
   const referenceHeader = ['index', 'hlink', 'himage', 'lon', 'lat', 'address', 'price', 'sqm'];
   return arrayEquals(referenceHeader, fileHeader);
 }
-
+ 
 export const useLocations = defineStore({
 
   id: 'locations',
@@ -109,7 +108,7 @@ export const useLocations = defineStore({
         reader.readAsBinaryString(this.file);
       }
     },
-    searchOptimal() {
+    async searchOptimal() {
 
       const poiApi = usePoiApi();
       const api = useKeyApi();
@@ -126,25 +125,16 @@ export const useLocations = defineStore({
           const queryObject = { "pois": selectedPois, "houses": uploadedLocations };
 
           //post request
-          axios
+          await axios
             .post(`http://0.0.0.0:3001/api/filteredByIsoArea?API_KEY=${api.ConfirmedAPIstring}`, queryObject)
-            .then((res) => (
-
-              //composing functions: with the solution set of the indexes we should filter-in the houses of our interest
-              this.$state.solutions = res.data
-            ));
-
-          //triggering it all time this is is called?
-          this.$state.locationsOnDisplay = this.$state.solutions.housesAllPoi.map(obj => ({ ...obj, focus: false }))
-
-          //updatind the pois that can be used as filters
-          this.poisChoiceUpdate();
-
+            .then((res) =>  this.callbackWithBunchOfStuff(res )   )
         }
-
-
       } else { console.log("The KEY for the API was not inserted and confirmed") }
-
+    },
+    callbackWithBunchOfStuff(res){
+      this.$state.solutions = res.data;
+      this.$state.locationsOnDisplay = res.data.housesAllPoi.map(obj => ({ ...obj, focus: false }));
+      this.poisChoiceUpdate()
     },
     matrixBestRoutes() {
       //POST body initiatilisation: Removing object from Prototype 
@@ -228,7 +218,7 @@ export const useLocations = defineStore({
 
       //conditoonally serve one or another filter for POI
       const newPoiSet = this.$state.filters.selectedPoisIndexes.map((poi) => poi.poiId);
-      console.log(newPoiSet);
+      
       function ifPoiFiltering(arrayOfpoi){
         const poiFiltering = (houseObj) => intersect( newPoiSet, houseObj.poiId);
         const poiFiltering2 = () => true;
@@ -240,27 +230,20 @@ export const useLocations = defineStore({
         }
       } 
       const finalPoiFilterig = ifPoiFiltering(this.$state.filters.poiIndexes.length);
-      console.log(finalPoiFilterig);
+      
 
       if (this.$state.housesSet === 'All Houses') {
-
-        console.log('refresing filtering on all hosues ');
         const filteredItems = this.$state.locationsList.map(obj => ({ ...obj, focus: false }))
           .filter(priceFiltering)
-          .filter(sqmFiltering)
-          .filter(finalPoiFilterig);
-        console.log(filteredItems);
+          .filter(sqmFiltering);
         this.$state.locationsOnDisplay = filteredItems;
-
       }
       else {
-        console.log('refresing filtering on hosues of the areas ');
         const filteredItems = this.$state.solutions.housesAllPoi.map(obj => ({ ...obj, focus: false }))
           .filter(priceFiltering)
           .filter(sqmFiltering)
           .filter(finalPoiFilterig);
         this.$state.locationsOnDisplay = filteredItems;
-
       }
 
     }

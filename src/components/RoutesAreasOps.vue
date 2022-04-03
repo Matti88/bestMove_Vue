@@ -2,14 +2,14 @@
   <div>
     <div class="card p-fluid">
       <h4>Houses within Areas</h4>
-        <SelectButton v-model="housesSet" :options="options" />
+        <SelectButton v-model="housesSet" :options="options" @change="setHousesToDisplay()"/>
     </div>
   </div>
 </template>
 
 <script>
 import { ref } from 'vue';
-import { defineComponent, watch } from "@vue/runtime-core";
+import { defineComponent } from "@vue/runtime-core";
 import { useLocations } from "@/stores/locations";
 import { storeToRefs } from 'pinia'
 
@@ -31,9 +31,7 @@ export default defineComponent({
     const {housesSet} = storeToRefs(locations);
 
     const options = ref(['Houses Filtered POI', 'All Houses']);
-
-    watch(housesSet, () => {setHousesToDisplay()} )
-
+ 
     return {
       onChangeF,
       searchOptimal,
@@ -43,7 +41,9 @@ export default defineComponent({
       printMatrix,
       printSearch,
       housesSet,
-      options
+      options,
+
+      setHousesToDisplay
     };
   },
 });
