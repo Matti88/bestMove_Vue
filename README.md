@@ -9,8 +9,8 @@ This is an MVP including the following features:
 - filtering houses on hose characteristics and by isochronous
 
 ## Example 1
-![](/bestMove2/public/appBestMove1.png)
+![](/public/appBestMove1.png)
 
 ## Example 2
-![](/bestMove2/public/appBestMove2.png)
+![](/public/appBestMove2.png)
  
