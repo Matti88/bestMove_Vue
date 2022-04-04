@@ -13,4 +13,8 @@ This is an MVP including the following features:
 
 ## Example 2
 ![](/public/appBestMove2.png)
+
+## TO Add
+![](/public/appMetric.png)
  
+
