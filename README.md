@@ -8,6 +8,15 @@ This is an MVP including the following features:
 - research and print of isochrone areas with various options
 - filtering houses on hose characteristics and by isochronous
 
+```mermaid
+graph TD
+    A[Christmas] -->|Get money| B(Go shopping)
+    B --> C{Let me think}
+    C -->|One| D[Laptop]
+    C -->|Two| E[iPhone]
+    C -->|Three| F[fa:fa-car Car]
+```
+
 ## Example 1
 ![](/public/appBestMove1.png)
 
