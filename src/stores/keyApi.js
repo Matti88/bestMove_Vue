@@ -5,8 +5,8 @@ import { defineStore } from 'pinia'
 export const useKeyApi = defineStore({
   id: 'keyApi',
   state: () => ({
-    InsertedAPIstring : "6ff1e1cca8fa4e248e37d74ae59144af",
-    ConfirmedAPIstring: "6ff1e1cca8fa4e248e37d74ae59144af"
+    InsertedAPIstring : "",
+    ConfirmedAPIstring: ""
   }),
   actions: {
     confirmKey(){
