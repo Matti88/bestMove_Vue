@@ -11,12 +11,7 @@ const routes = [
         name: 'app',
         component: App,
         children: [
-            {
-                path: '/',
-                name: 'DashBoard',
-                component: () => import('./components/DashBoard.vue'),
-                meta: { requiresAuth: true },
-            },
+
             {
                 path: '/register',
                 name: 'RegisterPage',
@@ -28,6 +23,12 @@ const routes = [
                 name: 'Login',
                 component: () => import('./views/LoginPage.vue'),
                 meta: { requiresAuth: false },
+            },
+            {
+                path: '/',
+                name: 'DashBoard',
+                component: () => import('./components/DashBoard.vue'),
+                meta: { requiresAuth: true },
             },
             {
                 path: '/profile',
@@ -64,7 +65,7 @@ router.beforeEach((to, from, next) => {
 
     if (to.matched.some(record => record.meta.requiresAuth)) {
         if (userStates.isAuthenticated()) {
-            next();
+            next({ name: "DashBoard" });
             return;
         }
         next('/login');

@@ -14,13 +14,35 @@ export const usersState = defineStore({
 
     actions: {
         async register() {
+            console.log("registering")
             const userForm_ = this.$state.userForm;
-            await axios.post('register', userForm_);
-            this.logIn();
+            await axios.post('register', userForm_).then(this.logIn());
+
         },
         async logIn() {
-            const userForm_ = this.$state.userForm;
-            await axios.post('login', userForm_);
+            var bodyFormData = new FormData();
+            bodyFormData.append('username', this.$state.userForm.username);
+            bodyFormData.append('password', this.$state.userForm.password);
+            console.log("something happened on the way to heaven");
+            const { data } =
+                await axios({
+                    method: "post",
+                    url: "login",
+                    data: bodyFormData,
+                    headers: { "Content-Type": "multipart/form-data" },
+                    config: { "withCredentials": true }
+                })
+                    .then(function (response) {
+                        //handle success
+                        console.log(response);
+                    })
+                    .catch(function (response) {
+                        //handle error
+                        console.log(response);
+                    });
+
+            axios.default.headers.common['Authorization'] = `Bearer ${data.token}`;
+
             this.viewMe();
             this.$state.userForm = { "username": "", "password": "" }
         },

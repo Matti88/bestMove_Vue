@@ -27,6 +27,8 @@ services:
     image: postgres:13
     expose:
       - 5432
+    ports:
+      - 5432:5432
     environment:
       - POSTGRES_USER=hello_fastapi
       - POSTGRES_PASSWORD=hello_fastapi

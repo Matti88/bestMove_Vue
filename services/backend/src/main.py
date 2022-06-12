@@ -1,3 +1,4 @@
+from src.routes import users, notes
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from tortoise import Tortoise
@@ -14,7 +15,6 @@ import 'from src.routes import users, notes' must be after 'Tortoise.init_models
 why?
 https://stackoverflow.com/questions/65531387/tortoise-orm-for-python-no-returns-relations-of-entities-pyndantic-fastapi
 """
-from src.routes import users, notes
 
 app = FastAPI()
 
@@ -34,3 +34,8 @@ register_tortoise(app, config=TORTOISE_ORM, generate_schemas=False)
 @app.get("/")
 def home():
     return "Hello, World!"
+
+
+@app.get("/salame")
+def home():
+    return "What is a Woman!"

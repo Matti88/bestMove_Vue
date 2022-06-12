@@ -24,11 +24,13 @@ router = APIRouter()
 
 @router.post("/register", response_model=UserOutSchema)
 async def create_user(user: UserInSchema) -> UserOutSchema:
+    print(user)
     return await crud.create_user(user)
 
 
 @router.post("/login")
 async def login(user: OAuth2PasswordRequestForm = Depends()):
+    print(user)
     user = await validate_user(user)
 
     if not user:
