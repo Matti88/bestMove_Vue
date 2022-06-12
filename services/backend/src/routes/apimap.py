@@ -14,14 +14,14 @@ async def distance_matrix_api(matrixQuery, housesSourcesToPOI):
 
 
 @router.post("/filter_houses_in_areas")
-async def filter_houses_in_areas_api(pois_and_houses):
-    pois_and_houses_ = json.loads(pois_and_houses)
+async def filter_houses_in_areas_api(pois_and_houses: Request):
+    pois_and_houses_ = json.loads(pois_and_houses.json())
     return filter_houses_in_areas(pois_and_houses_)
 
 
 @router.post("/polygon_collection")
-async def polygon_collection_api(poiObject):
-    poiObject_ = json.load(poiObject)
+async def polygon_collection_api(poiObject: Request):
+    poiObject_ = json.load(poiObject.json())
     return polygon_collection(poiObject_)
 
 
