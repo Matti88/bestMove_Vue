@@ -5,7 +5,7 @@
       "server": "127.0.0.1",
       "port": 5432,
       "driver": "PostgreSQL",
-      "name": "g",
+      "name": "GeneralConnection",
       "database": "hello_fastapi_dev",
       "username": "hello_fastapi",
       "password": "hello_fastapi"
