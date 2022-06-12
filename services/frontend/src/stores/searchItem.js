@@ -88,7 +88,7 @@ export const useSearchItems = defineStore({
         queryStreetPOI(searchString, ConfirmedAPIstring) {
 
             // invoke('stree_to_go', { textquery: JSON.stringify(searchString), api: ConfirmedAPIstring })
-            axios.post('stree_to_go', { textquery: JSON.stringify(searchString), api: ConfirmedAPIstring })
+            axios.post('stree_to_go', { params: { textquery: JSON.stringify(searchString), api: ConfirmedAPIstring } })
                 .then((response) => (this.$state.results = this.$state.results = JSON.parse(response).features));
 
         }
