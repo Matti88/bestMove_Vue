@@ -2,8 +2,6 @@
 import { createRouter, createWebHashHistory } from 'vue-router';
 import App from './App.vue';
 import { usersState } from './stores/user';
-// const { userStates } = usersState();
-// const { isAuthenticated } = userStates;
 
 const routes = [
     {
@@ -68,14 +66,9 @@ router.beforeEach((to, from, next) => {
 
     const userStates = usersState();
 
-    console.log("rerouting");
-    console.log(to.matched.some(record => record.meta.requiresAuth));
-
     if (to.matched.some(record => record.meta.requiresAuth)) {
-        console.log(userStates.isAuthenticated());
-        if (userStates.isAuthenticated()) {
 
-            console.log("rerouting with access");
+        if (userStates.isAuthenticated()) {
 
             next();
             return;
