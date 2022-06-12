@@ -11,21 +11,26 @@ const routes = [
         name: 'app',
         component: App,
         children: [
-
             {
-                path: '/register',
-                name: 'RegisterPage',
-                component: () => import('./views/RegisterPage.vue'),
-                meta: { requiresAuth: false },
+                path: '/',
+                name: 'HomePage',
+                component: () => import('./views/HomePage.vue')
             },
             {
                 path: '/login',
                 name: 'Login',
-                component: () => import('./views/LoginPage.vue'),
-                meta: { requiresAuth: false },
+                component: () => import('./views/LoginPage.vue')
+
             },
             {
-                path: '/',
+                path: '/register',
+                name: 'Register',
+                component: () => import('./views/RegisterPage.vue')
+
+            },
+
+            {
+                path: '/dashboard',
                 name: 'DashBoard',
                 component: () => import('./components/DashBoard.vue'),
                 meta: { requiresAuth: true },
@@ -63,14 +68,20 @@ router.beforeEach((to, from, next) => {
 
     const userStates = usersState();
 
+    console.log("rerouting");
+    console.log(to.matched.some(record => record.meta.requiresAuth));
+
     if (to.matched.some(record => record.meta.requiresAuth)) {
+        console.log(userStates.isAuthenticated());
         if (userStates.isAuthenticated()) {
-            next({ name: "DashBoard" });
+
+            console.log("rerouting with access");
+
+            next();
             return;
         }
         next('/login');
     } else {
-        console.log("blocked here");
         next();
     }
 });

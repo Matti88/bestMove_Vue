@@ -107,11 +107,6 @@ import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue-3/dist/bootstrap-vue-3.css'
 import axios from 'axios';
 
-// router.beforeEach(function (to, from, next) {
-//   window.scrollTo(0, 0);
-//   next();
-// });
-
 
 //setting for axios
 axios.defaults.withCredentials = true;
@@ -225,6 +220,5 @@ app.use(createPinia())
 app.component('BlockViewer', BlockViewer);
 
 app.mount('#app');
-
 
 

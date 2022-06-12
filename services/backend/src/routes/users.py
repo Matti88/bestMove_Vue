@@ -30,7 +30,7 @@ async def create_user(user: UserInSchema) -> UserOutSchema:
 
 @router.post("/login")
 async def login(user: OAuth2PasswordRequestForm = Depends()):
-    print(user)
+
     user = await validate_user(user)
 
     if not user:

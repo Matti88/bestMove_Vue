@@ -50,34 +50,16 @@ export default {
       staticMenuInactive: false,
       overlayMenuActive: false,
       mobileMenuActive: false,
-      menu: [
-        {
-          label: "Home",
-          items: [
-            {
-              label: "Dashboard",
-              icon: "pi pi-fw pi-home",
-              to: "/",
-            },
-            {
-              label: "FileAndTable",
-              icon: "pi pi-fw pi-home",
-              to: "/FileAndTable",
-            },
-            {
-              label: "ApiKeyInsert",
-              icon: "pi pi-fw pi-home",
-              to: "/ApiKeyInsert",
-            },
-          ],
-        },
-      ],
-
       items: [
         {
-          label: "Map Analysis",
+          label: "Home",
           icon: "pi pi-fw pi-file",
           to: "/",
+        },
+        {
+          label: "Dashboard",
+          icon: "pi pi-fw pi-file",
+          to: "/dashboard",
         },
         {
           label: "Upload File",
@@ -88,6 +70,16 @@ export default {
           label: "API Key",
           icon: "pi pi-fw pi-user",
           to: "/ApiKeyInsert",
+        },
+        {
+          label: "Login",
+          icon: "pi pi-fw pi-user",
+          to: "/login",
+        },
+        {
+          label: "Register",
+          icon: "pi pi-fw pi-user",
+          to: "/register",
         },
       ],
     };

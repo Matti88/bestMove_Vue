@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { defineStore } from 'pinia';
+import router from '../router';
 
 export const usersState = defineStore({
     id: 'users',
@@ -23,31 +24,20 @@ export const usersState = defineStore({
             var bodyFormData = new FormData();
             bodyFormData.append('username', this.$state.userForm.username);
             bodyFormData.append('password', this.$state.userForm.password);
-            console.log("something happened on the way to heaven");
-            const { data } =
-                await axios({
-                    method: "post",
-                    url: "login",
-                    data: bodyFormData,
-                    headers: { "Content-Type": "multipart/form-data" },
-                    config: { "withCredentials": true }
-                })
-                    .then(function (response) {
-                        //handle success
-                        console.log(response);
-                    })
-                    .catch(function (response) {
-                        //handle error
-                        console.log(response);
-                    });
+            await axios({
+                method: "post",
+                url: "login",
+                data: bodyFormData,
+                headers: { "Content-Type": "multipart/form-data" },
+                config: { "withCredentials": true }
+            }).catch(function (response) { console.log(response); })
 
-            axios.default.headers.common['Authorization'] = `Bearer ${data.token}`;
+            await this.viewMe()
 
-            this.viewMe();
-            this.$state.userForm = { "username": "", "password": "" }
-        },
-        async viewMe() {
-            this.user = await axios.get('users/whoami');
+            await router.push('/dashboard');
+
+            this.$state.userForm = { "username": "", "password": "" };
+
         },
         async deleteUser() {
             await axios.delete(`user/${this.$state.user.id}`);
@@ -56,12 +46,18 @@ export const usersState = defineStore({
             this.$state.user = null;
             this.$state.userForm = { "username": "", "password": "" }
         },
+        async viewMe() {
+            let { data } = await axios.get('users/whoami');
+            this.$state.user = data;
+
+        },
         isAuthenticated() {
             return !!this.$state.user
         },
         stateUser() {
             return this.$state.user
-        }
+        },
+
     }
 })
 
