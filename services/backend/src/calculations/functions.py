@@ -48,50 +48,49 @@ def search_between_all_solutions(allHouses, pois):
 
         for poi in pois:
             if check_house_in_reachable_area(home_["lon"], home_["lat"], poi['polygons']):
-                list_of_matching_POIs.append(home_)
+                list_of_matching_POIs.append(poi['id'])
 
         home_enhaced = home_.copy()
-        home_enhaced['poi_insert'] = list_of_matching_POIs
+        home_enhaced['poiId'] = list_of_matching_POIs
         housesInTheArea.append(home_enhaced)
 
     return housesInTheArea
 
 
-# calculate time distance to a selected set of houses
-def addToHouseMatrixResults(JSONmatrix, housesSourcesToPOI_):
+# # calculate time distance to a selected set of houses
+# def addToHouseMatrixResults(JSONmatrix, housesSourcesToPOI_):
 
-    matrixDistancesSelectedHouses = {}
-    matrixDistancesSelectedHouses["units"] = JSONmatrix["units"]
-    matrixDistancesSelectedHouses["distance_units"] = JSONmatrix["distance_units"]
-    matrixDistancesSelectedHouses["mode"] = JSONmatrix["mode"]
+#     matrixDistancesSelectedHouses = {}
+#     matrixDistancesSelectedHouses["units"] = JSONmatrix["units"]
+#     matrixDistancesSelectedHouses["distance_units"] = JSONmatrix["distance_units"]
+#     matrixDistancesSelectedHouses["mode"] = JSONmatrix["mode"]
 
-    housesSelectedforProximity = []
+#     housesSelectedforProximity = []
 
-    for house in JSONmatrix['sources_to_targets']:
+#     for house in JSONmatrix['sources_to_targets']:
 
-        momentHouse = copy.copy(house[0])
+#         momentHouse = copy.copy(house[0])
 
-        momentHouse['house'] = housesSourcesToPOI_[momentHouse['source_index']]
+#         momentHouse['house'] = housesSourcesToPOI_[momentHouse['source_index']]
 
-        housesSelectedforProximity.append(momentHouse)
+#         housesSelectedforProximity.append(momentHouse)
 
-    matrixDistancesSelectedHouses["distanceMatrix"] = housesSelectedforProximity
+#     matrixDistancesSelectedHouses["distanceMatrix"] = housesSelectedforProximity
 
-    return matrixDistancesSelectedHouses
+#     return matrixDistancesSelectedHouses
 
 
 # PROXY FUNCTIONS
 # querying polygons
 def polygon_collection(poiObject, API_KEY='a9cbd3b7750a419894fce13d99e243b5'):
 
-    print(poiObject)
     print(poiObject['geoObject']['properties']['lat'])
     print(poiObject['geoObject']['properties']['lon'])
 
     lat_ = poiObject['geoObject']['properties']['lat']
     lon_ = poiObject['geoObject']['properties']['lon']
-    range_ = poiObject['isoParams']['range']['code']
-    mode_ = poiObject['isoParams']['mode']['code']
+    range_ = poiObject['isoParams']['range']
+    mode_ = poiObject['isoParams']['mode']
     type_ = poiObject['isoParams']['type']
 
     url = """https://api.geoapify.com/v1/isoline?"""\
@@ -109,7 +108,7 @@ def polygon_collection(poiObject, API_KEY='a9cbd3b7750a419894fce13d99e243b5'):
     JSONmapObj = json.loads(resp.content)
 
     # return ListOfShapes, JSONmapObj
-    return JSONmapObj
+    return {"poi": poiObject, "geoApify": JSONmapObj}
 
 
 def stree_to_go(text, API_KEY='a9cbd3b7750a419894fce13d99e243b5'):
@@ -130,17 +129,15 @@ def filter_houses_in_areas(pois_and_houses):
     return search_between_all_solutions(houses, pois)
 
 
-def distance_matrix(matrixQuery, housesSourcesToPOI_, API_KEY='a9cbd3b7750a419894fce13d99e243b5'):
+def distance_matrix(matrixQuery, API_KEY='a9cbd3b7750a419894fce13d99e243b5'):
+
+    print(matrixQuery)
 
     url = """https://api.geoapify.com/v1/routematrix?"""\
         + "apiKey=" + API_KEY
     headers = {'content-type': 'application/json'}
 
     resp = requests.post(url, headers=headers, data=json.dumps(matrixQuery))
-
     JSONmatrix = json.loads(resp.content)
 
-    housesSelectedforProximity = addToHouseMatrixResults(
-        JSONmatrix, housesSourcesToPOI_)
-
-    return housesSelectedforProximity
+    return JSONmatrix

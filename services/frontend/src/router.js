@@ -41,12 +41,6 @@ const routes = [
             }
             ,
             {
-                path: '/ApiKeyInsert',
-                name: 'ApiKeyInsert',
-                component: () => import('./components/ApiKeyInsert.vue'),
-                meta: { requiresAuth: true },
-            },
-            {
                 path: '/FileAndTable',
                 name: 'FileAndTable',
                 component: () => import('./components/FileAndTable.vue'),

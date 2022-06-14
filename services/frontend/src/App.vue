@@ -67,11 +67,6 @@ export default {
           to: "/FileAndTable",
         },
         {
-          label: "API Key",
-          icon: "pi pi-fw pi-user",
-          to: "/ApiKeyInsert",
-        },
-        {
           label: "Login",
           icon: "pi pi-fw pi-user",
           to: "/login",

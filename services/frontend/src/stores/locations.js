@@ -2,7 +2,6 @@
 
 import * as XLSX from 'xlsx';
 import { defineStore } from 'pinia';
-import { useKeyApi } from './keyApi';
 //import { invoke } from '@tauri-apps/api/tauri'; 
 import axios from 'axios';
 
@@ -30,8 +29,9 @@ function checkFileFormat(fileHeader) {
 
 const arrAvg = arr => arr.reduce((a, b) => a + b, 0) / arr.length
 
-function solutionFromMatrix(SolutionMatrix, sourcesHouses) {
-  const solutionMatrix = JSON.parse(SolutionMatrix);
+function solutionFromMatrix(solutionMatrix, sourcesHouses) {
+
+
   const arrayOfAverage = solutionMatrix.sources_to_targets.map((sourceWise) => (arrAvg(sourceWise.map((target_) => (target_.time)))))
   const housePreferenceIndex = arrayOfAverage.map((k, i) =>
 
@@ -103,8 +103,7 @@ export const useLocations = defineStore({
     },
     async matrixPatterns() {
 
-      //POST body initiatilisation: Removing object from Prototype  
-      const api = useKeyApi();
+      //POST body initiatilisation: Removing object from Prototype   
       const solutionsHouses = this.$state.locationsOnDisplay;
       const poiIndexes_ = this.getPois();
 
@@ -113,29 +112,27 @@ export const useLocations = defineStore({
         [Object.keys(solutionsHouses).length === 0, poiIndexes_.length == 0].some(el => el == true);
 
       /*Launching the query for the distance matrix*/
-      if (api.getConfirmation()) {
-        if (!testDataForSubmission) {
-          const sources_ = solutionsHouses.map((house) => ({ "location": [house.lon, house.lat] }));
-          const targets_ = poiIndexes_.map((poi_) => ({ "location": [poi_.poi.geoObject.properties.lon, poi_.poi.geoObject.properties.lat] }));
-          const bestMoveMatrixObj = { "mode": "drive", "sources": sources_, "targets": targets_ };
-          const sizeMatrix = sources_.length * targets_.length
+
+      if (!testDataForSubmission) {
+        const sources_ = solutionsHouses.map((house) => ({ "location": [house.lon, house.lat] }));
+        const targets_ = poiIndexes_.map((poi_) => ({ "location": [poi_.poi.geoObject.properties.lon, poi_.poi.geoObject.properties.lat] }));
+        const bestMoveMatrixObj = { "mode": "drive", "sources": sources_, "targets": targets_ };
+        const sizeMatrix = sources_.length * targets_.length
 
 
-          console.log("The total size of the matrix is: ", sizeMatrix);
-          if (sizeMatrix <= 20) {
+        console.log("The total size of the matrix is: ", sizeMatrix);
+        if (sizeMatrix <= 20) {
 
-            //invoking matrix
-            // invoke('distance_matrix', { poishouses: JSON.stringify(bestMoveMatrixObj), api: api.ConfirmedAPIstring })
-            axios.post('distance_matrix', { poishouses: JSON.stringify(bestMoveMatrixObj), api: api.ConfirmedAPIstring })
-              .then((res) => (this.$state.locationsOnDisplay = solutionFromMatrix(res, solutionsHouses)))
+          axios.post('distance_matrix', { "poisVshouses": bestMoveMatrixObj })
+            .then((res) => (this.$state.locationsOnDisplay = solutionFromMatrix(res.data, solutionsHouses)))
 
-          } else {
-            alert("Combinations of POIs and Houses exceed the limit of 20");
-            console.log("The total size of the matrix exceed 20 relatios. We suggest to limit the research ");
-          }
+        } else {
+          alert("Combinations of POIs and Houses exceed the limit of 20");
+          console.log("The total size of the matrix exceed 20 relations. We suggest to limit the research ");
+        }
 
-        } else { console.log("The Data Structure to submit for calculations are empty!") }
-      } else { console.log("The KEY for the API was not inserted and confirmed") }
+      } else { console.log("The Data Structure to submit for calculations are empty!") }
+
     },
     async updateHousesSubsetInPOI() {
 
@@ -146,9 +143,6 @@ export const useLocations = defineStore({
       /*These data are essential for the calcuation: test of their existence*/
       const testDataForSubmission = [uploadedLocations.length == 0, selectedPois.length == 0].some(el => el == true);
 
-      console.log(uploadedLocations);
-      console.log(testDataForSubmission);
-
       if (!testDataForSubmission) {
 
         const poisCalcObjects = selectedPois.map((el_) => (
@@ -157,34 +151,19 @@ export const useLocations = defineStore({
             id: el_.poi.id
           }
         ))
-        const queryObject = { houses: uploadedLocations, pois: poisCalcObjects };
+        const queryObject = { "houses": uploadedLocations, "": poisCalcObjects };
 
-        // await invoke('filter_houses_in_areas', { poishouses: JSON.stringify(queryObject) })
-        await axios.post('filter_houses_in_areas', { poishouses: JSON.stringify(queryObject) })
-          .then((res) => (this.callbackSubsetHouses(JSON.parse(res))));
+        await axios.post('filter_houses_in_areas', { "poishouses": queryObject })
+          .then((res) => (this.callbackSubsetHouses(res.data)));
 
       }
     },
-    async queryCollectPoiPolygon(poiObject, ConfirmedAPIstring_) {
 
-      let poiStringified = JSON.stringify(poiObject);
+    async updatePolygonsAndHousesSubsetInPOI(poiObject) {
 
-      // await invoke('polygon_collection', { poiobject: poiStringified, api: ConfirmedAPIstring_ })
-      await axios.post('polygon_collection', { poiobject: poiStringified, api: ConfirmedAPIstring_ })
+      await axios.post('polygon_collection', { "poiobject": poiObject })
         .then((res) => (
-          this.$state.poiArea = [...this.$state.poiArea, JSON.parse(res)]
-        ));
-
-    },
-
-    async updatePolygonsAndHousesSubsetInPOI(poiObject, ConfirmedAPIstring_) {
-
-      let poiStringified = JSON.stringify(poiObject);
-
-      // await invoke('polygon_collection', { poiobject: poiStringified, api: ConfirmedAPIstring_ })
-      await axios.post('polygon_collection', { poiobject: poiStringified, api: ConfirmedAPIstring_ })
-        .then((res) => (
-          this.$state.poiArea = [...this.$state.poiArea, JSON.parse(res)]
+          this.$state.poiArea = [...this.$state.poiArea, res.data]
         ));
 
 
@@ -195,9 +174,6 @@ export const useLocations = defineStore({
       /*These data are essential for the calcuation: test of their existence*/
       const testDataForSubmission = [uploadedLocations.length == 0, selectedPois.length == 0].some(el => el == true);
 
-      console.log(uploadedLocations);
-      console.log(testDataForSubmission);
-
       if (!testDataForSubmission) {
 
         const poisCalcObjects = selectedPois.map((el_) => (
@@ -208,9 +184,8 @@ export const useLocations = defineStore({
         ))
         const queryObject = { houses: uploadedLocations, pois: poisCalcObjects };
 
-        // await invoke('filter_houses_in_areas', { poishouses: JSON.stringify(queryObject) })
-        await axios.post('filter_houses_in_areas', { poishouses: JSON.stringify(queryObject) })
-          .then((res) => (this.callbackSubsetHouses(JSON.parse(res))));
+        await axios.post('filter_houses_in_areas', { "poishouses": queryObject })
+          .then((res) => (this.callbackSubsetHouses(res.data)));
 
       }
     },
@@ -218,9 +193,9 @@ export const useLocations = defineStore({
 
 
 
-    callbackSubsetHouses(res) {
-      this.$state.locationsList = res.houses;
-      this.$state.locationsOnDisplay = res.houses.map(obj => ({ ...obj, focus: false })); //adding the focus parameter because of the on-hover effect
+    callbackSubsetHouses(response) {
+      this.$state.locationsList = response;
+      this.$state.locationsOnDisplay = response.map(obj => ({ ...obj, focus: false })); //adding the focus parameter because of the on-hover effect
     },
     setListOfAllHousesBegin(listOfAllHouses) {
       this.$state.locationsList = listOfAllHouses.map(obj => ({ ...obj, focus: false })) //adding the focus parameter because of the on-hover effect
@@ -242,7 +217,6 @@ export const useLocations = defineStore({
 
       const arraySetPOIids = this.$state.filters.selectedPoisIndexes.filter(poiSelectedFiltering).map((poi) => poi.item);
 
-      console.log(arraySetPOIids);
 
       //conditionally serve one or another filter for POI
       function ifPoiFiltering(selectedPois) {
@@ -298,23 +272,15 @@ export const useLocations = defineStore({
     },
     addPoi(poiObject) {
 
-      console.log("Adding the following POI into the list")
-      console.log(poiObject);
-
-      const api = useKeyApi();
       //adding a given POI to the POI array
-      if (api.getConfirmation()) {
+      poiObject.id = this.$state.poiArea.length == 0 ? 1 : Math.max(...this.$state.poiArea.map((poi) => poi.poi.id)) + 1;
+      this.$state.solutions = [];
+      this.updatePolygonsAndHousesSubsetInPOI(poiObject);
 
-        poiObject.id = this.$state.poiArea.length == 0 ? 1 : Math.max(...this.$state.poiArea.map((poi) => poi.poi.id)) + 1;
-        this.$state.solutions = [];
-        this.updatePolygonsAndHousesSubsetInPOI(poiObject, api.ConfirmedAPIstring);
+      //add the list of selectedPoisIndexes 
+      const poiForSelection = { "item": poiObject.id, "label": poiObject.title, "selected": true }
+      this.$state.filters.selectedPoisIndexes.push(poiForSelection)
 
-        //add the list of selectedPoisIndexes 
-        const poiForSelection = { "item": poiObject.id, "label": poiObject.title, "selected": true }
-        this.$state.filters.selectedPoisIndexes.push(poiForSelection)
-
-      }
-      else { console.log("The KEY for the API was not inserted and confirmed") }
     },
 
 
@@ -348,9 +314,6 @@ export const useLocations = defineStore({
 
     },
     printStatus() {
-      console.log("========1111111111111111111111==  ======");
-      console.log(this.$state);
-      console.log("========000000000000000000000  0========");
 
     },
     resetLocations() {

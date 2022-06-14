@@ -1,7 +1,6 @@
 
 //store for POI component management
 import { defineStore } from 'pinia'
-import { useKeyApi } from './keyApi'
 import { useLocations } from './locations'
 import _ from 'lodash';
 // import { invoke } from '@tauri-apps/api/tauri';
@@ -55,15 +54,11 @@ export const useSearchItems = defineStore({
         queryResults: _.debounce(
             function () {
 
-                //query the suggested locations given a string with partial name
-                const api = useKeyApi();
+                if (!this.$state.selected) {
+                    this.$state.isOpen = true;
+                    this.queryStreetPOI(this.$state.searchString);
+                }
 
-                if (api.getConfirmation()) {
-                    if (!this.$state.selected) {
-                        this.$state.isOpen = true;
-                        this.queryStreetPOI(this.$state.searchString, api.ConfirmedAPIstring);
-                    }
-                } else { console.log("The KEY for the API was not inserted and confirmed") }
             }
             , 1000),
 
@@ -85,11 +80,10 @@ export const useSearchItems = defineStore({
 
         },
 
-        queryStreetPOI(searchString, ConfirmedAPIstring) {
+        queryStreetPOI(searchString) {
 
-            // invoke('stree_to_go', { textquery: JSON.stringify(searchString), api: ConfirmedAPIstring })
-            axios.post('stree_to_go', { params: { textquery: JSON.stringify(searchString), api: ConfirmedAPIstring } })
-                .then((response) => (this.$state.results = this.$state.results = JSON.parse(response).features));
+            axios.get('street_to_go/', { params: { text: JSON.stringify(searchString) } })
+                .then((response) => (this.results = response.data.features));
 
         }
         ,
