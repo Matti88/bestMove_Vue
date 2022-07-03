@@ -14,7 +14,7 @@ This is an MVP including the following features:
 ## Example 2
 ![](/public/appBestMove2.png)
 
-## TO Add
+## The Choice Index (aka Home Price Index)
 ![](/public/appMetric.png)
  
 
