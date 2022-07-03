@@ -5,6 +5,7 @@ from requests.structures import CaseInsensitiveDict
 import urllib.parse
 import copy
 
+API_KEY_STRING = 'insert your api key here'
 
 # CALCULATION FUNCTIONS - These can be optimized
 # Ray tracing
@@ -57,32 +58,10 @@ def search_between_all_solutions(allHouses, pois):
     return housesInTheArea
 
 
-# # calculate time distance to a selected set of houses
-# def addToHouseMatrixResults(JSONmatrix, housesSourcesToPOI_):
-
-#     matrixDistancesSelectedHouses = {}
-#     matrixDistancesSelectedHouses["units"] = JSONmatrix["units"]
-#     matrixDistancesSelectedHouses["distance_units"] = JSONmatrix["distance_units"]
-#     matrixDistancesSelectedHouses["mode"] = JSONmatrix["mode"]
-
-#     housesSelectedforProximity = []
-
-#     for house in JSONmatrix['sources_to_targets']:
-
-#         momentHouse = copy.copy(house[0])
-
-#         momentHouse['house'] = housesSourcesToPOI_[momentHouse['source_index']]
-
-#         housesSelectedforProximity.append(momentHouse)
-
-#     matrixDistancesSelectedHouses["distanceMatrix"] = housesSelectedforProximity
-
-#     return matrixDistancesSelectedHouses
-
 
 # PROXY FUNCTIONS
 # querying polygons
-def polygon_collection(poiObject, API_KEY='a9cbd3b7750a419894fce13d99e243b5'):
+def polygon_collection(poiObject, API_KEY=API_KEY_STRING):
 
     print(poiObject['geoObject']['properties']['lat'])
     print(poiObject['geoObject']['properties']['lon'])
@@ -111,7 +90,7 @@ def polygon_collection(poiObject, API_KEY='a9cbd3b7750a419894fce13d99e243b5'):
     return {"poi": poiObject, "geoApify": JSONmapObj}
 
 
-def stree_to_go(text, API_KEY='a9cbd3b7750a419894fce13d99e243b5'):
+def stree_to_go(text, API_KEY=API_KEY_STRING):
 
     url = """https://api.geoapify.com/v1/geocode/autocomplete?"""\
         + "text=" + urllib.parse.quote(text.encode('utf8'))\
@@ -129,7 +108,7 @@ def filter_houses_in_areas(pois_and_houses):
     return search_between_all_solutions(houses, pois)
 
 
-def distance_matrix(matrixQuery, API_KEY='a9cbd3b7750a419894fce13d99e243b5'):
+def distance_matrix(matrixQuery, API_KEY=API_KEY_STRING):
 
     print(matrixQuery)
 

@@ -26,7 +26,11 @@ Check out the [post](https://testdriven.io/blog/developing-a-single-page-app-wit
 
 ## Want to use this project?
 
-Build the images and spin up the containers:
+#### Go to GeoApify, create your project's API KEY and insert it here
+![](/public/key_insertion.png)
+ 
+
+#### Build the images and spin up the containers:
 
 ```sh
 $ docker-compose up -d --build
